@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"strings"
 )
 
 var (
@@ -52,6 +53,9 @@ func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate
 	}
 
 	content := message.Content
+	if !strings.HasPrefix(content, commandPrefix) {
+		return
+	}
 	discord.ChannelMessageSend(message.ChannelID, "Testing..")
 
 	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author, content)
