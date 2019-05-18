@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
-	//"strings"
+	"strings"
 )
 
 var (
@@ -63,7 +63,15 @@ func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate
 	if len(content) < 1 {
 		return
 	}
-	discord.ChannelMessageSend(message.ChannelID, "Testing..")
+	args := strings.Fields(content)
+	name := strings.ToLower(args[0])
+	if name == "rpg" {
+		discord.ChannelMessageSend(message.ChannelID, "rpg hunt")
+	}
+	if name == "test" {
+		discord.ChannelMessageSend(message.ChannelID, "Testing..")
+
+	}
 
 	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author, content)
 }
