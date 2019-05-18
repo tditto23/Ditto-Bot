@@ -5,44 +5,53 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// our main function
+var (
+	commandPrefix string
+	botID         string
+)
+
 func main() {
-	d, err := discordgo.New("Bot NTc5MjA1NjU3OTIwNTM2NTc3.XN-xWg.uL2-1PVqTSs9cvWqaNUvPy9OaOA")
+	discord, err := discordgo.New("Bot NTc5MjA1NjU3OTIwNTM2NTc3.XN-xWg.uL2-1PVqTSs9cvWqaNUvPy9OaOA")
+	errCheck("error creating discord session", err)
+	user, err := discord.User("@me")
+	errCheck("error retrieving account", err)
 
-	if err != nil {
-		fmt.Println("failed to create discord session", err)
-	}
+	botID = user.ID
+	discord.AddHandler(commandHandler)
+	discord.AddHandler(func(discord *discordgo.Session, ready *discordgo.Ready) {
+		err = discord.UpdateStatus(0, "A friendly helpful bot!")
+		if err != nil {
+			fmt.Println("Error attempting to set my status")
+		}
+		servers := discord.State.Guilds
+		fmt.Printf("SuperAwesomeOmegaTutorBot has started on %d servers", len(servers))
+	})
 
-	bot, err := d.User("@me")
+	err = discord.Open()
+	errCheck("Error opening connection to Discord", err)
+	defer discord.Close()
 
-	if err != nil {
-		fmt.Println("failed to access account", err)
-	}
-
-	d.AddHandler(handleCmd)
-	err = d.Open()
-
-	if err != nil {
-		fmt.Println("unable to establish connection", err)
-	}
-
-	defer d.Close()
+	commandPrefix = "D!"
 
 	<-make(chan struct{})
+
 }
 
-// our command handler function
-func handleCmd(d *discordgo.Session, msg *discordgo.MessageCreate) {
-	user := msg.Author
-	if user.ID == bid || user.Bot {
+func errCheck(msg string, err error) {
+	if err != nil {
+		fmt.Printf("%s: %+v", msg, err)
+		panic(err)
+	}
+}
+
+func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate) {
+	user := message.Author
+	if user.ID == botID || user.Bot {
+		//Do nothing because the bot is talking
 		return
 	}
 
-	content := msg.Content
+	content := message.Content
 
-	if content == "!test" {
-		d.ChannelMessageSend(msg.ChannelID, "Testing..")
-	}
-
-	fmt.Printf("Message: %+v\n", msg.Message)
+	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author)
 }
