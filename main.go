@@ -52,6 +52,7 @@ func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate
 	}
 
 	content := message.Content
+	d.ChannelMessageSend(msg.ChannelID, "Testing..")
 
 	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author, content)
 }
