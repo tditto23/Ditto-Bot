@@ -7,7 +7,7 @@ import (
 
 // our main function
 func main() {
-	d, err := discordgo.New("Bot 579197034234511361")
+	d, err := discordgo.New("Bot NTc5MjA1NjU3OTIwNTM2NTc3.XN-xWg.uL2-1PVqTSs9cvWqaNUvPy9OaOA")
 
 	if err != nil {
 		fmt.Println("failed to create discord session", err)
@@ -40,7 +40,7 @@ func handleCmd(d *discordgo.Session, msg *discordgo.MessageCreate) {
 
 	content := msg.Content
 
-	if (content == "!test") {
+	if content == "!test" {
 		d.ChannelMessageSend(msg.ChannelID, "Testing..")
 	}
 
