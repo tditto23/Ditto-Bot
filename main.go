@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"strings"
+	//"strings"
 )
 
 var (
@@ -53,7 +54,14 @@ func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate
 	}
 
 	content := message.Content
-	if !strings.HasPrefix(content, commandPrefix) {
+	if len(content) <= len(commandPrefix) {
+		return
+	}
+	if content[:len(commandPrefix)] != commandPrefix {
+		return
+	}
+	content = content[len(commandPrefix)+1:]
+	if len(content) < 1 {
 		return
 	}
 	discord.ChannelMessageSend(message.ChannelID, "Testing..")
