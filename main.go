@@ -53,5 +53,5 @@ func commandHandler(discord *discordgo.Session, message *discordgo.MessageCreate
 
 	content := message.Content
 
-	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author)
+	fmt.Printf("Message: %+v || From: %s\n", message.Message, message.Author, content)
 }
